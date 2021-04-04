@@ -18,13 +18,3 @@ export const componentsProjectPath = process.env.APP_COMPONENTS_PROJECT_PATH || 
     ? '' // TODO: /data/web/mango-components
     : (process.env.local === 'true' ? '~/work/mango/mango-components/' : '/data/web/mango-components/')
 );
-
-// 来源
-export enum InnerSource {
-  // TODO = 'todo',
-}
-
-// 允许的内部调用来源
-export const allowedInnerSource = [
-  // { source: InnerSource.TODO, key: isProduction ? '' : '' },
-]

@@ -1,7 +1,5 @@
 import app from './server';
 
-import { isProduction } from './config';
-
 async function run() {
   // TODO: 全链路监控
 
@@ -21,8 +19,8 @@ async function run() {
     process.on(sig, () => {
       console.log(sig);
       server.close(() => process.exit());
-    })
-  })
+    });
+  });
 }
 
 run();

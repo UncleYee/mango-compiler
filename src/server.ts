@@ -20,6 +20,6 @@ app.use(bodyParser());
 const router = getRouter();
 app
   .use(router.routes())
-  .use(router.allowedMethods())
+  .use(router.allowedMethods());
 
 export default app;
