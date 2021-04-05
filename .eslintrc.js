@@ -8,6 +8,7 @@ module.exports = {
     project: './tsconfig.json'
   },
   rules: {
-    'no-nested-ternary': 'off'
+    'no-nested-ternary': 'off',
+    'global-require': 'off'
   }
 }
