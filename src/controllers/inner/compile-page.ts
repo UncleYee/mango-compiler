@@ -59,7 +59,7 @@ export default async (ctx: KoaContext) => {
     // 根据模板 生成入口文件
     await outputFileAsync(entry, Modules + templateContent);
 
-    // TODO 编译文件
+    // TODO 编译文件 to outputFilePath
 
     const fileContent = await readFileAsync(entry, { encoding: 'utf-8' });
     ctx.body = {
@@ -77,9 +77,9 @@ export default async (ctx: KoaContext) => {
     ctx.body = codeMessageWithDetail(codeManager.compileComponentError, message);
   } finally {
     // 清理文件 包括临时的入口文件和生成的文件
-    // const filePaths = [entry, outputFilePath];
-    // Promise
-    //   .all(filePaths.map((filePath) => removeAsync(filePath)))
-    //   .catch((e) => console.log(`remove files${filePaths.join(';')} error: ${e.message}`));
+    const filePaths = [entry, outputFilePath];
+    Promise
+      .all(filePaths.map((filePath) => removeAsync(filePath)))
+      .catch((e) => console.log(`remove files${filePaths.join(';')} error: ${e.message}`));
   }
 };
