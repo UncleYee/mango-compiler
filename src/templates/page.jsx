@@ -21,7 +21,7 @@ const App = () => {
         const res = await fetch(JSON_PATH)
         const json = await res.json()
         if (json.code === 0) {
-          const pairs = json.data.content.map(item => [item.widgetID, item.moduleData])
+          const pairs = json.data.content.map(item => [item.moudleID, item.moduleData])
           setContent(_.fromPairs(pairs))
         }
       })()
