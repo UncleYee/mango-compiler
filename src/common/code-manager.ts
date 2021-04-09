@@ -3,11 +3,7 @@ export interface CodeMessage {
   message: string
 }
 
-interface CodeManager {
-  [propName: string]: CodeMessage
-}
-
-const codeManager: CodeManager = {
+const codeManager = {
   systemError: {
     code: -1000,
     message: '系统错误',

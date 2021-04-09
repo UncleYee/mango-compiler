@@ -1,3 +1,5 @@
+// 动态写入 Modules
+// const Modules = [{ Component: window['${module.library}'], id: '${module.id}' }`)]
 /* eslint-disable */ 
 import ReactDOM from 'react-dom'
 import React, { useEffect, useState } from 'react'
@@ -5,8 +7,6 @@ import React, { useEffect, useState } from 'react'
 import _ from 'lodash';
 import { PageHeader, PageFooter } from '@base';
 
-// 动态写入 Modules
-// const Modules = [{ Component: window['${module.library}'], id: '${module.id}' }`)]
 const initialContent = JSON.parse(document.getElementById('initialContent').innerHTML)
 
 const App = () => {

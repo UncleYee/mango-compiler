@@ -1,6 +1,6 @@
 import path from 'path';
 
-import { staticPublic, componentsProjectPath } from '../config'; // componentsProjectPath
+import { staticPublic, componentsProjectPath, tempPath } from '../config'; // componentsProjectPath
 
 // 要求组件必须在项目 src/components 目录下
 const componentsFolder = 'src/components';
@@ -21,10 +21,10 @@ export const getComponentEntry = (folderName: string) => path.join(componentsPro
 // );
 
 // 页面 js 临时文件入口
-// export const getPageEntry = (siteID: number, pageID: number, fileName: string) => (
-//   path.join(tempPath, `pages/${siteID}/${pageID}/${fileName}`)
-// );
+export const getPageEntry = (tenantID: number, pageID: number, fileName: string) => (
+  path.join(tempPath, `pages/${tenantID}/${pageID}/${fileName}`)
+);
 // 页面 js 临时文件输出路径
-// export const getPageOutputPath = (siteID: number, pageID: number) => (
-//   path.join(tempPath, `build/pages/${siteID}/${pageID}`)
-// );
+export const getPageOutputPath = (tenantID: number, pageID: number) => (
+  path.join(tempPath, `build/pages/${tenantID}/${pageID}`)
+);

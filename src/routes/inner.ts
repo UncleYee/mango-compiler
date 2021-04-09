@@ -1,6 +1,7 @@
 import Router from 'koa-router';
 
 import compileComponent from '@/controllers/inner/compile-component';
+import compilePage from '@/controllers/inner/compile-page';
 
 const router = new Router();
 
@@ -11,7 +12,7 @@ const router = new Router();
 router.post('/component/compile', compileComponent);
 
 // 编译页面
-// router.post('/page/compile', compilerPage)
+router.post('/page/compile', compilePage);
 
 // 生成 html 文件
 // router.post('/html/render', renderHtml)

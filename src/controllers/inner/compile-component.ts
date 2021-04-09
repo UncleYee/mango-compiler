@@ -1,7 +1,6 @@
 import _ from 'lodash';
 import fse from 'fs-extra';
 import yaml from 'js-yaml';
-import Router from 'koa-router';
 import { promisify } from 'util';
 
 import * as rollup from 'rollup';
@@ -22,11 +21,12 @@ import {
   commonPath,
 } from '@/common/paths';
 import { logger } from '@/common/logger';
+import { KoaContext } from '@/interfaces/koa-context';
 import codeManager, { codeMessageWithDetail, paramErrorWithDetail } from '@/common/code-manager';
 
 const readFileAsync = promisify<string, { encoding: string }, string>(fse.readFile);
 
-export default async (ctx: Router.IRouterContext) => {
+export default async (ctx: KoaContext) => {
   const { folderName, base = false, globalVariables } = ctx.request.body;
   if (!folderName) {
     ctx.body = paramErrorWithDetail('folderName');
