@@ -126,8 +126,7 @@ export default async (ctx: KoaContext) => {
     ],
   };
   const outputOptions: any = {
-    name: 'video',
-    // file: outputPath,
+    name: library,
     format: 'umd',
     globals: {
       react: 'React',
