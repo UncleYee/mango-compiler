@@ -1,5 +1,5 @@
 // 动态写入 Modules
-// const Modules = [{ Component: window['${module.library}'], id: '${module.id}' }`)]
+// const Modules = [{ component: window['${module.library}'], id: '${module.id}' }`)]
 /* eslint-disable */ 
 import ReactDOM from 'react-dom'
 import React, { useEffect, useState } from 'react'
@@ -21,7 +21,7 @@ const App = () => {
         const res = await fetch(JSON_PATH)
         const json = await res.json()
         if (json.code === 0) {
-          const pairs = json.data.content.map(item => [item.moudleID, item.moduleData])
+          const pairs = json.data.content.map(item => [item.moduleID, item.moduleData])
           setContent(_.fromPairs(pairs))
         }
       })()
@@ -33,7 +33,7 @@ const App = () => {
       <PageHeader />
       {
         Modules.map(module => {
-          const { Component, id } = module
+          const { component: Component, id } = module
           const data = content[id]
           return (module && data) ? <Component.default key={id} data={data} /> : null
         })
