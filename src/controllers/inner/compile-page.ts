@@ -3,16 +3,10 @@ import path from 'path';
 import fse from 'fs-extra';
 import { promisify } from 'util';
 
-// import * as rollup from 'rollup';
-// import json from '@rollup/plugin-json';
-// import babel from 'rollup-plugin-babel';
-// import postcss from 'rollup-plugin-postcss';
-// import rollupYaml from '@rollup/plugin-yaml';
-// import replace from '@rollup/plugin-replace';
-// import { uglify } from 'rollup-plugin-uglify';
-// import commonjs from '@rollup/plugin-commonjs';
-// import resolve from '@rollup/plugin-node-resolve';
-// import typescript from 'rollup-plugin-typescript2';
+import * as rollup from 'rollup';
+import babel from 'rollup-plugin-babel';
+import { uglify } from 'rollup-plugin-uglify';
+import commonjs from '@rollup/plugin-commonjs';
 
 import { logger } from '@/common/logger';
 import { hashString } from '@/common/utils';
@@ -23,7 +17,6 @@ import codeManager, { paramErrorWithDetail, codeMessageWithDetail } from '@/comm
 const outputFileAsync = promisify<string, any>(
   fse.outputFile as (file: string, data: any, callback: (err: Error) => void) => void,
 );
-const readFileAsync = promisify<string, { encoding: string }, string>(fse.readFile);
 const removeAsync = promisify(fse.remove);
 
 export default async (ctx: KoaContext) => {
@@ -52,16 +45,46 @@ export default async (ctx: KoaContext) => {
   const outputFilePath = path.join(outputPath, filename);
 
   // 动态生成入口文件
-  const Modules = `const Modules = [${modules.map((module) => `{ Component: window['${module.library}'], id: '${module.id}' }`).join(', ')}]`;
+  const Modules = `const Modules = [${modules.map((module) => `{ component: window['${module.library}'], id: '${module.id}' }`).join(', ')}]`;
   try {
     // 模板内容
     const templateContent = fse.readFileSync(path.resolve(__dirname, '../../templates/page.jsx'), { encoding: 'utf-8' });
     // 根据模板 生成入口文件
     await outputFileAsync(entry, Modules + templateContent);
+    // 编译页面的配置
+    const options = {
+      input: entry,
+      external: ['react', 'react-dom', 'lodash', '@base'],
+      plugins: [
+        babel({
+          exclude: 'node_modules/**',
+          presets: [
+            '@babel/preset-env',
+            '@babel/preset-react',
+          ],
+        }),
+        // resolve(),
+        commonjs(),
+        uglify(),
+      ],
+    };
+    // 编译输出的配置
+    const outputOptions: any = {
+      // file: `${outputPath}/${hashString(moduleIDs).slice(0, 8)}.js`,
+      format: 'iife',
+      globals: {
+        react: 'React',
+        'react-dom': 'ReactDOM',
+        lodash: '_',
+        '@base': '@base',
+      },
+    };
+    // 打包过程
+    const bundle = await rollup.rollup(options);
+    // const res = await bundle.generate(outputOptions);
+    const { output } = await bundle.generate(outputOptions);
+    const fileContent = output[0].code;
 
-    // TODO 编译文件 to outputFilePath
-
-    const fileContent = await readFileAsync(entry, { encoding: 'utf-8' });
     ctx.body = {
       ...codeManager.success,
       data: fileContent,

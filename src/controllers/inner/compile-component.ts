@@ -38,6 +38,7 @@ export default async (ctx: KoaContext) => {
   }
   let config: any;
   try {
+    // 读组件的配置
     const yamlData = await readFileAsync(getComponentYamlConfigPath(folderName), { encoding: 'utf-8' });
     config = yaml.load(yamlData);
     if (!_.isPlainObject(config)) {
@@ -53,10 +54,10 @@ export default async (ctx: KoaContext) => {
     });
     ctx.body = codeMessageWithDetail(codeManager.getComponentConfigError, e.message);
   }
-
+  // 文件入口
   const entry = getComponentEntry(folderName);
   const library = base ? '_mango_base' : `_mango_component_${_.get(config, 'metaType')}`;
-
+  // rollup基础配置
   const defaultInputOptions = {
     input: entry,
     external: ['react', 'react-dom', 'lodash', '@base'],
@@ -100,7 +101,7 @@ export default async (ctx: KoaContext) => {
     json(),
     rollupYaml(),
   ];
-
+  // 分环境配置
   const developmentInputOptions = {
     ...defaultInputOptions,
     plugins: [
@@ -137,15 +138,13 @@ export default async (ctx: KoaContext) => {
   };
 
   try {
+    // 打包
     const generate = async (options) => {
       const bundle = await rollup.rollup(options);
-
-      // generate code and a sourcemap
       const { output } = await bundle.generate(outputOptions);
-
       return output[0].code;
     };
-
+    // 生成不同环境的文件
     const [development, production] = await Promise.all([
       generate(developmentInputOptions),
       generate(productionInputOptions),
