@@ -63,14 +63,12 @@ export default async (ctx: KoaContext) => {
             '@babel/preset-react',
           ],
         }),
-        // resolve(),
         commonjs(),
         uglify(),
       ],
     };
     // 编译输出的配置
     const outputOptions: any = {
-      // file: `${outputPath}/${hashString(moduleIDs).slice(0, 8)}.js`,
       format: 'iife',
       globals: {
         react: 'React',
@@ -81,7 +79,6 @@ export default async (ctx: KoaContext) => {
     };
     // 打包过程
     const bundle = await rollup.rollup(options);
-    // const res = await bundle.generate(outputOptions);
     const { output } = await bundle.generate(outputOptions);
     const fileContent = output[0].code;
 
@@ -103,6 +100,13 @@ export default async (ctx: KoaContext) => {
     const filePaths = [entry, outputFilePath];
     Promise
       .all(filePaths.map((filePath) => removeAsync(filePath)))
-      .catch((e) => console.log(`remove files${filePaths.join(';')} error: ${e.message}`));
+      .catch((e) => {
+        logger.warn({
+          event: 'remove-temp-file',
+          msg: e.message,
+          desc: `path: ${entry}`,
+          stack: e.stack,
+        });
+      });
   }
 };
