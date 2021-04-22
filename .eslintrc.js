@@ -9,6 +9,9 @@ module.exports = {
   },
   rules: {
     'no-nested-ternary': 'off',
-    'global-require': 'off'
+    'global-require': 'off',
+    'react/prop-types': 'off',
+    'react/no-danger': 'off',
+    'react/no-array-index-key': 'off'
   }
 }
