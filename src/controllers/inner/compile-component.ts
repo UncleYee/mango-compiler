@@ -74,7 +74,7 @@ export default async (ctx: KoaContext) => {
     }),
     postcss({
       autoModules: true,
-      extensions: ['.css', '.less'],
+      extensions: ['.css', '.scss'],
       plugins: [
         require('postcss-flexbugs-fixes'),
         require('postcss-preset-env')({
